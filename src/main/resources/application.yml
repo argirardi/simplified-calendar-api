@@ -1,0 +1,23 @@
+## default connection pool
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+
+
+
+## PostgreSQL
+    url: jdbc:postgresql://localhost:5432/simplified-calendar
+    username: simplified-calendar
+    password: utDem3uFz2P4L!QF
+
+#drop n create table again, good for testing, comment this in production
+  jpa:
+    hibernate:
+      ddl-auto: create
+      javax:
+        persistence:
+          schema-generation:
+            scripts:
+              create-target: create.sql

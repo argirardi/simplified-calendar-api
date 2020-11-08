@@ -1,6 +1,6 @@
 package girardi.reis.anderson.simplifiedcalendarapi.api.v1.validator;
 
-import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.EventDTO;
+import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.EventRequestDTO;
 import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.RecurrenceDTO;
 import girardi.reis.anderson.simplifiedcalendarapi.api.v1.enumeration.FrequencyType;
 import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.exception.InvalidEventException;
@@ -14,7 +14,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-public class EventDTOValidatorTest {
+public class EventRequestDTOValidatorTest {
 
     private static final String INVALID_DURATION_MESSAGE_TEMPLATE = "The event duration must be lesser than %s minutes.";
     private static final int YEAR = 2020;
@@ -34,7 +34,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenAllFieldsAreNullThenMustInvalidateRequest() {
 
-        StepVerifier.create(eventValidator.validate(new EventDTO()))
+        StepVerifier.create(eventValidator.validate(new EventRequestDTO()))
                 .consumeErrorWith(throwable -> Assertions.assertEquals(3, ((InvalidEventException) throwable).getErrors().size()))
                 .verify();
     }
@@ -43,7 +43,7 @@ public class EventDTOValidatorTest {
     public void givenEventSpansToNextDayThenMustInvalidateRequest() {
 
 
-        EventDTO spanningEvent = new EventDTO();
+        EventRequestDTO spanningEvent = new EventRequestDTO();
         spanningEvent.setName("Spanning Event");
         spanningEvent.setStartDateTime(startDateTime);
         spanningEvent.setDuration(DURATION_THIRTY_MINUTES);
@@ -60,7 +60,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenEventEndsBeforeNextDayThenMustValidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);
@@ -73,7 +73,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenRecurrenceEventIsInvalidThenMustInvalidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);
@@ -87,7 +87,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenDailyRecurrenceEventIsValidThenMustValidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);
@@ -105,7 +105,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenWeeklyRecurrenceEventIsInvalidThenMustInvalidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);
@@ -123,7 +123,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenWeeklyRecurrenceEventIsValidThenMustValidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);
@@ -142,7 +142,7 @@ public class EventDTOValidatorTest {
     @Test
     public void givenMonthlyRecurrenceEventIsValidThenMustValidateRequest() {
 
-        EventDTO singleDayEvent = new EventDTO();
+        EventRequestDTO singleDayEvent = new EventRequestDTO();
         singleDayEvent.setName("Single Day Event");
         singleDayEvent.setStartDateTime(startDateTime);
         singleDayEvent.setDuration(DURATION_TWENTY_NINE_MINUTES);

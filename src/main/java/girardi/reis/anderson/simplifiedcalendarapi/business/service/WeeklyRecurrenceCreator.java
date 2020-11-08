@@ -1,6 +1,6 @@
 package girardi.reis.anderson.simplifiedcalendarapi.business.service;
 
-import girardi.reis.anderson.simplifiedcalendarapi.business.model.Event;
+import girardi.reis.anderson.simplifiedcalendarapi.business.domain.Event;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 

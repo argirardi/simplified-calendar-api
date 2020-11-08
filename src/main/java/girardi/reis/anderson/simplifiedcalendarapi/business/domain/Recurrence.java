@@ -1,33 +1,20 @@
-package girardi.reis.anderson.simplifiedcalendarapi.business.model;
+package girardi.reis.anderson.simplifiedcalendarapi.business.domain;
 
 import girardi.reis.anderson.simplifiedcalendarapi.business.enumeration.FrequencyType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.*;
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
-@Embeddable
 public class Recurrence {
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "FREQUENCY_TYPE")
     private FrequencyType frequencyType;
-
-    @Enumerated(EnumType.STRING)
-    @ElementCollection
-    @CollectionTable(name = "recurrence_days_week", joinColumns = @JoinColumn(name = "recurrence_id"))
-    @Column(name = "days_week")
     private Set<DayOfWeek> daysOfWeek;
-
-    @Column(name = "END_RECURRENCE_DATE_TIME")
-    private ZonedDateTime endDateTime;
-
-    @Column(name = "NUMBER_OF_OCCURRENCES")
-    private Integer numberOfOccurrencesUntilTheEnd;
+    private LocalDate endRecurrenceDate;
+    private Integer numberOfOccurrences;
 
     public FrequencyType getFrequencyType() {
         return frequencyType;
@@ -45,20 +32,20 @@ public class Recurrence {
         this.daysOfWeek = daysOfWeek;
     }
 
-    public ZonedDateTime getEndDateTime() {
-        return endDateTime;
+    public LocalDate getEndRecurrenceDate() {
+        return endRecurrenceDate;
     }
 
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
+    public void setEndRecurrenceDate(LocalDate endRecurrenceDate) {
+        this.endRecurrenceDate = endRecurrenceDate;
     }
 
-    public Integer getNumberOfOccurrencesUntilTheEnd() {
-        return numberOfOccurrencesUntilTheEnd;
+    public Integer getNumberOfOccurrences() {
+        return numberOfOccurrences;
     }
 
-    public void setNumberOfOccurrencesUntilTheEnd(Integer numberOfOccurrencesUntilTheEnd) {
-        this.numberOfOccurrencesUntilTheEnd = numberOfOccurrencesUntilTheEnd;
+    public void setNumberOfOccurrences(Integer numberOfOccurrences) {
+        this.numberOfOccurrences = numberOfOccurrences;
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.ZonedDateTime;
 
-public class EventDTO {
+public class EventRequestDTO {
 
     private String name;
     private ZonedDateTime startDateTime;

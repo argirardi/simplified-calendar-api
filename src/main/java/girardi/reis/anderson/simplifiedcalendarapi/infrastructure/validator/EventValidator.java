@@ -1,6 +1,6 @@
 package girardi.reis.anderson.simplifiedcalendarapi.infrastructure.validator;
 
-import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.EventDTO;
+import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.EventRequestDTO;
 import girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto.RecurrenceDTO;
 import girardi.reis.anderson.simplifiedcalendarapi.api.v1.enumeration.FrequencyType;
 import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.exception.InvalidEventException;
@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Component
-public class EventValidator implements Validatable<EventDTO>{
+public class EventValidator implements Validatable<EventRequestDTO>{
 
     private static final String INVALID_DURATION_MESSAGE_TEMPLATE = "The event duration must be lesser than %s minutes.";
 
@@ -25,9 +25,9 @@ public class EventValidator implements Validatable<EventDTO>{
     public static final String DURATION_FIELD = "duration";
 
     @Override
-    public Mono<EventDTO> validate(EventDTO event) {
+    public Mono<EventRequestDTO> validate(EventRequestDTO event) {
 
-        Errors errors = new BeanPropertyBindingResult(event, EventDTO.class.getSimpleName());
+        Errors errors = new BeanPropertyBindingResult(event, EventRequestDTO.class.getSimpleName());
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, NAME_FIELD, "field.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, START_DATE_TIME_FIELD, "field.required");
@@ -56,7 +56,7 @@ public class EventValidator implements Validatable<EventDTO>{
         }
     }
 
-    private void validateSpanningEvent(Errors errors, EventDTO event) {
+    private void validateSpanningEvent(Errors errors, EventRequestDTO event) {
         if (isStartDateTimeAndDurationValid(errors)) {
 
             if (isSpanningEvent(event)) {
@@ -70,7 +70,7 @@ public class EventValidator implements Validatable<EventDTO>{
         return Objects.isNull(errors.getFieldError(START_DATE_TIME_FIELD)) && Objects.isNull(errors.getFieldError(DURATION_FIELD));
     }
 
-    private boolean isSpanningEvent(EventDTO event) {
+    private boolean isSpanningEvent(EventRequestDTO event) {
         ZonedDateTime nextDay = event.getStartDateTime().plusDays(1).truncatedTo(ChronoField.DAY_OF_MONTH.getBaseUnit());
         ZonedDateTime endDateTime = event.getStartDateTime().plusMinutes(event.getDuration());
         return !endDateTime.isBefore(nextDay);

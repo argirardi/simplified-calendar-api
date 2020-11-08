@@ -6,15 +6,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 public class RecurrenceDTO {
 
     private FrequencyType frequencyType;
     private Set<DayOfWeek> daysOfWeek;
-    private ZonedDateTime endDateTime;
-    private Integer numberOfOccurrencesUntilTheEnd;
+    private LocalDate endRecurrenceDate;
+    private Integer numberOfOccurrences;
 
     public FrequencyType getFrequencyType() {
         return frequencyType;
@@ -32,20 +32,20 @@ public class RecurrenceDTO {
         this.daysOfWeek = daysOfWeek;
     }
 
-    public ZonedDateTime getEndDateTime() {
-        return endDateTime;
+    public LocalDate getEndRecurrenceDate() {
+        return endRecurrenceDate;
     }
 
-    public void setEndDateTime(ZonedDateTime endDateTime) {
-        this.endDateTime = endDateTime;
+    public void setEndRecurrenceDate(LocalDate endRecurrenceDate) {
+        this.endRecurrenceDate = endRecurrenceDate;
     }
 
-    public Integer getNumberOfOccurrencesUntilTheEnd() {
-        return numberOfOccurrencesUntilTheEnd;
+    public Integer getNumberOfOccurrences() {
+        return numberOfOccurrences;
     }
 
-    public void setNumberOfOccurrencesUntilTheEnd(Integer numberOfOccurrencesUntilTheEnd) {
-        this.numberOfOccurrencesUntilTheEnd = numberOfOccurrencesUntilTheEnd;
+    public void setNumberOfOccurrences(Integer numberOfOccurrences) {
+        this.numberOfOccurrences = numberOfOccurrences;
     }
 
     @Override

@@ -1,36 +1,30 @@
-package girardi.reis.anderson.simplifiedcalendarapi.business.model;
+package girardi.reis.anderson.simplifiedcalendarapi.business.domain;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-@Entity
-@Table(name = "EVENT")
-public class Event {
+public class Event implements Cloneable {
 
-    @Id
-    @Column(name = "EVENT_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "START_DATE_TIME")
     private ZonedDateTime startDateTime;
-
-    @Column(name = "DURATION")
     private Short duration;
-
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="PARENT_EVENT_ID")
-    private Event parentEvent;
-
-    @Embedded
+    private Long parentEventId;
     private Recurrence recurrence;
+
+    public Event() {
+    }
+
+    private Event(Event event) {
+        this.name = event.getName();
+        this.startDateTime = event.startDateTime;
+        this.duration = event.getDuration();
+        this.parentEventId = event.getId();
+        this.recurrence = event.getRecurrence();
+    }
 
     public Long getId() {
         return id;
@@ -56,10 +50,6 @@ public class Event {
         this.startDateTime = startDateTime;
     }
 
-    public ZonedDateTime getEndDateTime() {
-        return startDateTime.plusMinutes(getDuration());
-    }
-
     public Short getDuration() {
         return duration;
     }
@@ -68,12 +58,12 @@ public class Event {
         this.duration = duration;
     }
 
-    public Event getParentEvent() {
-        return parentEvent;
+    public Long getParentEventId() {
+        return parentEventId;
     }
 
-    public void setParentEvent(Event parentEvent) {
-        this.parentEvent = parentEvent;
+    public void setParentEventId(Long parentEventId) {
+        this.parentEventId = parentEventId;
     }
 
     public Recurrence getRecurrence() {
@@ -82,6 +72,10 @@ public class Event {
 
     public void setRecurrence(Recurrence recurrence) {
         this.recurrence = recurrence;
+    }
+
+    public Boolean isRecurrent() {
+        return getRecurrence() != null && getRecurrence().getFrequencyType() != null;
     }
 
     @Override
@@ -99,4 +93,8 @@ public class Event {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    @Override
+    public Event clone() {
+        return new Event(this) ;
+    }
 }

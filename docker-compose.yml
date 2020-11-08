@@ -1,17 +1,5 @@
 version: "3"
 services:
-  simplified-calendar:
-    image: postgres:9.6
-    container_name: "simplified-calendar-database"
-    environment:
-      POSTGRES_DB: test
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: utDem3uFz2P4L!QF
-      TZ: GMT
-    volumes:
-      - "./data/postgres:/var/lib/postgresql/data"
-    ports:
-      - 5432:5432
   simplified-calendar-postgres:
     container_name: simplified-calendar-db
     image: postgres
@@ -21,6 +9,6 @@ services:
       POSTGRES_PASSWORD: utDem3uFz2P4L!QF
       PGDATA: /data/postgres
     volumes:
-      - "./data/postgres:/var/lib/postgresql/data"
+      - "./data/postgres:/var/lib/postgresql/simplified-calendar/data"
     ports:
-      - "5432:5432"
+      - 5432:5432

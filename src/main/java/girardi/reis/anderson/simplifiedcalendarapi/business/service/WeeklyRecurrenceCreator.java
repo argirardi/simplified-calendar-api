@@ -7,21 +7,33 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZonedDateTime;
 
 @Component
 public class WeeklyRecurrenceCreator extends RecurrenceCreator {
+
     public WeeklyRecurrenceCreator(final EventRepositoryCustom eventRepository,
                                    final ModelMapper modelMapper) {
         super(eventRepository, modelMapper);
     }
 
     @Override
-    protected LocalDateTime getStartDateTime(Event event, Integer period) {
-        return event.getStartDateTime().plusWeeks(period);
+    protected boolean skipUntil(Event event) {
+        return  event.getRecurrence().getDaysOfWeek().contains(event.getStartDateTime().getDayOfWeek());
+    }
+
+    @Override
+    protected ZonedDateTime getStartDateTime(Event event, Integer period) {
+        return event.getStartDateTime().plusDays(period);
     }
 
     @Override
     protected Integer getRecurrencePeriod(Period period) {
-        return period.getDays() / 7;
+        return period.getDays();
+    }
+
+    @Override
+    protected Integer getNumberOfOccurrences(Event event) {
+        return event.getRecurrence().getNumberOfOccurrences() * 7;
     }
 }

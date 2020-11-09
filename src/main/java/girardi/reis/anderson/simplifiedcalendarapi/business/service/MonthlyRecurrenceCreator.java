@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZonedDateTime;
 
 @Component
 public class MonthlyRecurrenceCreator extends DailyRecurrenceCreator {
@@ -18,7 +19,7 @@ public class MonthlyRecurrenceCreator extends DailyRecurrenceCreator {
     }
 
     @Override
-    protected LocalDateTime getStartDateTime(Event event, Integer period) {
+    protected ZonedDateTime getStartDateTime(Event event, Integer period) {
         return event.getStartDateTime().plusMonths(period);
     }
 

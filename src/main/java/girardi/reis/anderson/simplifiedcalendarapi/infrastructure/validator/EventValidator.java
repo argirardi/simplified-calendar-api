@@ -72,8 +72,8 @@ public class EventValidator implements Validatable<EventRequestDTO>{
     }
 
     private boolean isSpanningEvent(EventRequestDTO event) {
-        LocalDateTime nextDay = event.getStartDateTime().plusDays(1).truncatedTo(ChronoField.DAY_OF_MONTH.getBaseUnit());
-        LocalDateTime endDateTime = event.getStartDateTime().plusMinutes(event.getDuration());
+        ZonedDateTime nextDay = event.getStartDateTime().plusDays(1).truncatedTo(ChronoField.DAY_OF_MONTH.getBaseUnit());
+        ZonedDateTime endDateTime = event.getStartDateTime().plusMinutes(event.getDuration());
         return !endDateTime.isBefore(nextDay);
     }
 }

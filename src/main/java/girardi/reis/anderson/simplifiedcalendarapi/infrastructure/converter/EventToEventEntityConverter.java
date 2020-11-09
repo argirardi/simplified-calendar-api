@@ -20,7 +20,7 @@ public class EventToEventEntityConverter extends AbstractConverter<Event, EventE
         eventEntity.setId(event.getId());
         eventEntity.setDuration(event.getDuration());
         eventEntity.setName(event.getName());
-        eventEntity.setStartDateTime(event.getStartDateTime());
+        eventEntity.setStartDateTime(event.getStartDateTime().toLocalDateTime());
         eventEntity.setParentEventId(event.getParentEventId());
         setEventEntityFieldsFromRecurrence(event.getRecurrence(), eventEntity);
 

@@ -1,5 +1,6 @@
 package girardi.reis.anderson.simplifiedcalendarapi.api.v1.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import girardi.reis.anderson.simplifiedcalendarapi.api.v1.enumeration.FrequencyType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -13,6 +14,8 @@ public class RecurrenceDTO {
 
     private FrequencyType frequencyType;
     private Set<DayOfWeek> daysOfWeek;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endRecurrenceDate;
     private Integer numberOfOccurrences;
 

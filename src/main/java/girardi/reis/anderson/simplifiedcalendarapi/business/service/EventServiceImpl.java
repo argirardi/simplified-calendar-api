@@ -10,6 +10,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Service
@@ -60,7 +62,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private Mono<Event> configureNewEventForRecurrence(Event event, LocalDate fromDate, LocalDate toDate) {
-           event.setStartDateTime(LocalDateTime.of(fromDate.minusDays(1), event.getStartDateTime().toLocalTime()));
+           event.setStartDateTime(ZonedDateTime.of(fromDate.minusDays(1), event.getStartDateTime().toLocalTime(), ZoneId.systemDefault()));
            event.getRecurrence().setEndRecurrenceDate(toDate);
            return Mono.just(event);
     }

@@ -6,6 +6,7 @@ import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.entity.EventEn
 import org.modelmapper.AbstractConverter;
 
 import java.time.DayOfWeek;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class EventEntityToEventConverter extends AbstractConverter<EventEntity, 
         event.setId(eventEntity.getId());
         event.setDuration(eventEntity.getDuration());
         event.setName(eventEntity.getName());
-        event.setStartDateTime(eventEntity.getStartDateTime());
+        event.setStartDateTime(eventEntity.getStartDateTime().atZone(ZoneId.systemDefault()));
         event.setParentEventId(eventEntity.getParentEventId());
         event.setRecurrence(convertToRecurrence(eventEntity));
         return event;

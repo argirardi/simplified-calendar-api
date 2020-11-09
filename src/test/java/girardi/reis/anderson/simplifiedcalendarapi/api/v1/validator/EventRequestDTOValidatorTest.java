@@ -30,7 +30,7 @@ public class EventRequestDTOValidatorTest {
     private static final int DURATION_TWENTY_NINE_MINUTES = 29;
 
     private EventValidator eventValidator = new EventValidator();
-    private LocalDateTime startDateTime = LocalDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND);
+    private ZonedDateTime startDateTime = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
 
     @Test
     public void givenAllFieldsAreNullThenMustInvalidateRequest() {

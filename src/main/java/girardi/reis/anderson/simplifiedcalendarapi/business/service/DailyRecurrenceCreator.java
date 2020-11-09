@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZonedDateTime;
 
 @Component
 public class DailyRecurrenceCreator extends RecurrenceCreator {
@@ -16,7 +17,7 @@ public class DailyRecurrenceCreator extends RecurrenceCreator {
         super(eventRepository, modelMapper);
     }
 
-    protected LocalDateTime getStartDateTime(Event event, Integer period) {
+    protected ZonedDateTime getStartDateTime(Event event, Integer period) {
         return event.getStartDateTime().plusDays(period);
     }
 

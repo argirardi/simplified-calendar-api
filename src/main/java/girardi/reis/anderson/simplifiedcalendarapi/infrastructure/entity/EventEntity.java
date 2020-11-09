@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Table("event")
 public class EventEntity {
@@ -16,7 +16,7 @@ public class EventEntity {
     @Id
     private Long id;
     private String name;
-    private ZonedDateTime startDateTime;
+    private LocalDateTime startDateTime;
     private Short duration;
     private Long parentEventId;
 
@@ -48,11 +48,11 @@ public class EventEntity {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
+    public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
 

@@ -4,12 +4,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class EventRequestDTO {
 
     private String name;
-    private ZonedDateTime startDateTime;
+    private LocalDateTime startDateTime;
     private Integer duration;
     private RecurrenceDTO recurrence;
 
@@ -21,11 +21,11 @@ public class EventRequestDTO {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
+    public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
 

@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Objects;
@@ -71,8 +72,8 @@ public class EventValidator implements Validatable<EventRequestDTO>{
     }
 
     private boolean isSpanningEvent(EventRequestDTO event) {
-        ZonedDateTime nextDay = event.getStartDateTime().plusDays(1).truncatedTo(ChronoField.DAY_OF_MONTH.getBaseUnit());
-        ZonedDateTime endDateTime = event.getStartDateTime().plusMinutes(event.getDuration());
+        LocalDateTime nextDay = event.getStartDateTime().plusDays(1).truncatedTo(ChronoField.DAY_OF_MONTH.getBaseUnit());
+        LocalDateTime endDateTime = event.getStartDateTime().plusMinutes(event.getDuration());
         return !endDateTime.isBefore(nextDay);
     }
 }

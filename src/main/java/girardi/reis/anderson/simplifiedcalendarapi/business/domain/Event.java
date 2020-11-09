@@ -4,13 +4,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Event implements Cloneable {
 
     private Long id;
     private String name;
-    private ZonedDateTime startDateTime;
+    private LocalDateTime startDateTime;
     private Short duration;
     private Long parentEventId;
     private Recurrence recurrence;
@@ -42,11 +43,11 @@ public class Event implements Cloneable {
         this.name = name;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
+    public void setStartDateTime(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
 
@@ -76,6 +77,10 @@ public class Event implements Cloneable {
 
     public Boolean isRecurrent() {
         return getRecurrence() != null && getRecurrence().getFrequencyType() != null;
+    }
+
+    public Boolean isInfiniteRecurrence() {
+        return Objects.nonNull(getRecurrence()) && (Objects.isNull(getRecurrence().getNumberOfOccurrences()) && Objects.isNull(getRecurrence().getEndRecurrenceDate()));
     }
 
     @Override

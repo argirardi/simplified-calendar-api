@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class EventRequestDTOValidatorTest {
     private static final int DURATION_TWENTY_NINE_MINUTES = 29;
 
     private EventValidator eventValidator = new EventValidator();
-    private ZonedDateTime startDateTime = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
+    private LocalDateTime startDateTime = LocalDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND);
 
     @Test
     public void givenAllFieldsAreNullThenMustInvalidateRequest() {

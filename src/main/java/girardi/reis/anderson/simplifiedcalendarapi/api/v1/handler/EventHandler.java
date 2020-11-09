@@ -37,5 +37,18 @@ public class EventHandler {
                       .flatMap(event -> ServerResponse.ok().bodyValue(event));
     }
 
+    public Mono<ServerResponse> findEvents(ServerRequest request) {
 
+        return eventService.findEvents(request.queryParam("fromDate").get(), request.queryParam("toDate").get())
+                .flatMap(event -> Mono.just(modelMapper.map(event, EventResponseDTO.class)))
+                .collectList()
+                .flatMap(event -> ServerResponse.ok().bodyValue(event));
+    }
+
+    public Mono<ServerResponse> delete(ServerRequest request) {
+
+        return eventService.delete(Long.valueOf(request.pathVariable("id")))
+                .flatMap(event -> Mono.just(modelMapper.map(event, EventResponseDTO.class)))
+                .flatMap(event -> ServerResponse.ok().build());
+    }
 }

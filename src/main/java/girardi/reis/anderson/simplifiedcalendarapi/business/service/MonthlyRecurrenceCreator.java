@@ -4,14 +4,12 @@ import girardi.reis.anderson.simplifiedcalendarapi.business.domain.Event;
 import girardi.reis.anderson.simplifiedcalendarapi.business.repository.EventRepositoryCustom;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
 @Component
-public class MonthlyRecurrenceCreator extends DailyRecurrenceCreator {
+public class MonthlyRecurrenceCreator extends RecurrenceCreator {
 
     private static final int ONE_MONTH = 1;
 

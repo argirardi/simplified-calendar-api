@@ -8,6 +8,9 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 
 public class EventMock {
+    public static final Long EVENT_ID = 1L;
+    public static final short DURATION = (short) 30;
+    public static final String EVENT_NAME = "Event for testing";
 
     private static final int YEAR = 2020;
     private static final int MONTH = 11;
@@ -16,9 +19,7 @@ public class EventMock {
     private static final int MINUTE = 0;
     private static final int SECOND = 0;
     private static final int NANO_OF_SECOND = 0;
-    private static final ZonedDateTime ORIGINAL_DAILY_EVENT_START_DATE_TIME = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
-    private static final short DURATION = (short) 30;
-    private static final String EVENT_FOR_TESTING = "Event for testing";
+    public static final ZonedDateTime ORIGINAL_DAILY_EVENT_START_DATE_TIME = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
     private static final int NUMBER_OF_DAILY_OCCURRENCES = 3;
     private static final int NUMBER_OF_WEEKLY_OCCURRENCES = 3;
     private static final int ONE_DAY = 1;
@@ -42,7 +43,7 @@ public class EventMock {
     private static final int DAY_OF_MONTH_EIGHTEEN = 18;
     private static final int DAY_OF_MONTH_TWENTY = 20;
 
-    private static final ZonedDateTime FIRST_MONDAY     = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_TWO, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
+    public static final ZonedDateTime FIRST_MONDAY     = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_TWO, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
     private static final ZonedDateTime FIRST_WEDNESDAY  = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_FOUR, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
     private static final ZonedDateTime FIRST_FRIDAY     = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_SIX, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
 
@@ -54,6 +55,7 @@ public class EventMock {
     private static final ZonedDateTime THIRD_WEDNESDAY  = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_EIGHTEEN, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
     private static final ZonedDateTime THIRD_FRIDAY     = ZonedDateTime.of(YEAR, MONTH, DAY_OF_MONTH_TWENTY, HOUR, MINUTE, SECOND, NANO_OF_SECOND, ZoneId.systemDefault());
 
+    public static final Event NON_RECURRING_DAILY_EVENT                 = createNonRecurringEvent(ORIGINAL_DAILY_EVENT_START_DATE_TIME);
     public static final Event ORIGINAL_DAILY_RECURRING_EVENT            = createFixedRecurrencesDailyRecurringEvent(ORIGINAL_DAILY_EVENT_START_DATE_TIME);
     public static final Event FIRST_DAILY_RECURRING_EVENT               = createFixedRecurrencesDailyRecurringEvent(ORIGINAL_DAILY_EVENT_START_DATE_TIME.plusDays(ONE_DAY));
     public static final Event SECOND_DAILY_RECURRING_EVENT              = createFixedRecurrencesDailyRecurringEvent(ORIGINAL_DAILY_EVENT_START_DATE_TIME.plusDays(TWO_DAYS));
@@ -66,6 +68,7 @@ public class EventMock {
 
     public static final Event ORIGINAL_DAILY_ENDLESS_RECURRING_EVENT    = createEndlessRecurringEvent(ORIGINAL_DAILY_EVENT_START_DATE_TIME, FrequencyType.DAILY);
 
+    public static final Event ALL_WEEK_DAYS_WEEKLY_RECURRING_EVENT      = createFixedRecurrencesAllWeeklyRecurringEvent(FIRST_MONDAY);
     public static final Event ORIGINAL_WEEKLY_RECURRING_EVENT           = createFixedRecurrencesWeeklyRecurringEvent(FIRST_MONDAY);
     public static final Event SECOND_WEEKLY_RECURRING_EVENT             = createFixedRecurrencesWeeklyRecurringEvent(FIRST_WEDNESDAY);
     public static final Event THIRD_WEEKLY_RECURRING_EVENT              = createFixedRecurrencesWeeklyRecurringEvent(FIRST_FRIDAY);
@@ -98,11 +101,18 @@ public class EventMock {
 
     private static Event createEvent(ZonedDateTime startDateTime) {
         Event originalEvent = new Event();
-        originalEvent.setName(EVENT_FOR_TESTING);
+        originalEvent.setName(EVENT_NAME);
         originalEvent.setStartDateTime(startDateTime);
         originalEvent.setDuration(DURATION);
         return originalEvent;
     }
+
+    private static Event createNonRecurringEvent(ZonedDateTime startDateTime) {
+        Event originalEvent = createEvent(startDateTime);
+        originalEvent.setId(EVENT_ID);
+        return originalEvent;
+    }
+
 
     private static Recurrence createRecurrence(FrequencyType daily) {
         Recurrence recurrence = new Recurrence();
@@ -146,6 +156,15 @@ public class EventMock {
         return originalEvent;
     }
 
+    private static Event createFixedRecurrencesAllWeeklyRecurringEvent(ZonedDateTime startDateTime) {
+        Event originalEvent = createNonRecurringEvent(startDateTime);
+
+        Recurrence recurrence = createRecurrence(FrequencyType.WEEKLY);
+        recurrence.setDaysOfWeek(Set.of(DayOfWeek.SUNDAY, DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY));
+        recurrence.setNumberOfOccurrences(NUMBER_OF_WEEKLY_OCCURRENCES);
+        originalEvent.setRecurrence(recurrence);
+        return originalEvent;
+    }
     private static Event createDatedWeeklyRecurringEvent(ZonedDateTime startDateTime) {
         Event originalEvent = createEvent(startDateTime);
 

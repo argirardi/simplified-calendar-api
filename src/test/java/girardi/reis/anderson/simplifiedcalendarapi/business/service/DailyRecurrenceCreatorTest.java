@@ -19,7 +19,6 @@ import static girardi.reis.anderson.simplifiedcalendarapi.business.domain.EventM
 
 @Import(ModelMapperConfig.class)
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
 public class DailyRecurrenceCreatorTest {
 
     @MockBean

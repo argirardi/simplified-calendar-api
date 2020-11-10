@@ -30,14 +30,14 @@ public abstract class RecurrenceCreator {
         else
             return Flux.range(1, getNumberOfOccurrencesUntilTheEnd(event))
                     .flatMap(period -> cloneEvent(event, period))
-                    .filter(this::isMustCreateRecurrentEvent)
+                    .filter(this::isMustCreateRecurringEvent)
                     .flatMap(eventRepository::save)
                     .last()
                     .map(eventEntity -> event)
                     .switchIfEmpty(Mono.just(event));
     }
 
-    protected boolean isMustCreateRecurrentEvent(Event event) {
+    protected boolean isMustCreateRecurringEvent(Event event) {
         return  event.getStartDateTime() != null;
     }
 

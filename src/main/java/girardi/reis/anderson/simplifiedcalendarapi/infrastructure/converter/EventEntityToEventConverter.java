@@ -66,7 +66,7 @@ public class EventEntityToEventConverter extends AbstractConverter<EventEntity, 
             daysOfWeek.add(DayOfWeek.FRIDAY);
 
         if (eventEntity.isOccursOnSaturday())
-            daysOfWeek.add(DayOfWeek.WEDNESDAY);
+            daysOfWeek.add(DayOfWeek.SATURDAY);
 
         return daysOfWeek;
     }

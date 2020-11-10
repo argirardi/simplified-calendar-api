@@ -19,7 +19,7 @@ public class WeeklyRecurrenceCreator extends RecurrenceCreator {
     }
 
     @Override
-    protected boolean isMustCreateRecurrentEvent(Event event) {
+    protected boolean isMustCreateRecurringEvent(Event event) {
         return  event.getRecurrence().getDaysOfWeek().contains(event.getStartDateTime().getDayOfWeek());
     }
 

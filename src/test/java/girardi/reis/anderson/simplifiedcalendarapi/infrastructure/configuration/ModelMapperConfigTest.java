@@ -20,7 +20,6 @@ public class ModelMapperConfigTest {
     public void convertEventEntityToEventTest() {
 
         EventEntity eventEntity = new EventEntity();
-
         eventEntity.setOccursOnFriday(Boolean.TRUE);
 
         Event event = modelMapper.map(eventEntity, Event.class);

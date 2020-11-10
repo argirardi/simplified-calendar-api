@@ -5,12 +5,13 @@ import girardi.reis.anderson.simplifiedcalendarapi.business.repository.EventRepo
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
 @Component
 public class WeeklyRecurrenceCreator extends RecurrenceCreator {
+
+    public static final int NUMBER_DAYS_A_WEEK = 7;
 
     public WeeklyRecurrenceCreator(final EventRepositoryCustom eventRepository,
                                    final ModelMapper modelMapper) {
@@ -18,7 +19,7 @@ public class WeeklyRecurrenceCreator extends RecurrenceCreator {
     }
 
     @Override
-    protected boolean skipUntil(Event event) {
+    protected boolean isMustCreateRecurrentEvent(Event event) {
         return  event.getRecurrence().getDaysOfWeek().contains(event.getStartDateTime().getDayOfWeek());
     }
 
@@ -29,11 +30,11 @@ public class WeeklyRecurrenceCreator extends RecurrenceCreator {
 
     @Override
     protected Integer getRecurrencePeriod(Period period) {
-        return period.getDays();
+        return period.getDays() - ONE_DAY;
     }
 
     @Override
     protected Integer getNumberOfOccurrences(Event event) {
-        return event.getRecurrence().getNumberOfOccurrences() * 7;
+        return event.getRecurrence().getNumberOfOccurrences()  * NUMBER_DAYS_A_WEEK - ONE_DAY;
     }
 }

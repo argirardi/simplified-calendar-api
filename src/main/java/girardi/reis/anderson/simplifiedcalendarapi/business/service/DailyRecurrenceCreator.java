@@ -5,7 +5,6 @@ import girardi.reis.anderson.simplifiedcalendarapi.business.repository.EventRepo
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 
@@ -22,6 +21,7 @@ public class DailyRecurrenceCreator extends RecurrenceCreator {
     }
 
     protected Integer getRecurrencePeriod(Period period) {
-        return period.getDays();
+        return period.getDays() - ONE_DAY;
     }
 }
+

@@ -6,13 +6,13 @@ import org.modelmapper.ModelMapper;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 public abstract class RecurrenceCreator {
+
+    protected static final int ONE_DAY = 1;
 
     protected final EventRepositoryCustom eventRepository;
     protected final ModelMapper modelMapper;
@@ -30,14 +30,14 @@ public abstract class RecurrenceCreator {
         else
             return Flux.range(1, getNumberOfOccurrencesUntilTheEnd(event))
                     .flatMap(period -> cloneEvent(event, period))
-                    .filter(this::skipUntil)
+                    .filter(this::isMustCreateRecurrentEvent)
                     .flatMap(eventRepository::save)
                     .last()
                     .map(eventEntity -> event)
                     .switchIfEmpty(Mono.just(event));
     }
 
-    protected boolean skipUntil(Event event) {
+    protected boolean isMustCreateRecurrentEvent(Event event) {
         return  event.getStartDateTime() != null;
     }
 
@@ -49,7 +49,7 @@ public abstract class RecurrenceCreator {
 
     protected abstract ZonedDateTime getStartDateTime(Event event, Integer period);
 
-    protected Integer getNumberOfOccurrencesUntilTheEnd(Event event) {
+    private Integer getNumberOfOccurrencesUntilTheEnd(Event event) {
 
         if (Objects.nonNull(event.getRecurrence().getNumberOfOccurrences()))
             return getNumberOfOccurrences(event);
@@ -60,7 +60,7 @@ public abstract class RecurrenceCreator {
     }
 
     protected Integer getNumberOfOccurrences(Event event) {
-        return event.getRecurrence().getNumberOfOccurrences();
+        return event.getRecurrence().getNumberOfOccurrences() - ONE_DAY;
     }
 
     protected abstract Integer getRecurrencePeriod(Period period);

@@ -1,5 +1,6 @@
 package girardi.reis.anderson.simplifiedcalendarapi.infrastructure.configuration;
 
+import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.repository.EventRepository;
 import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.repository.EventRepositoryCustomImpl;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
@@ -42,7 +43,7 @@ public class R2dbcPostgresqlConfiguration extends AbstractR2dbcConfiguration {
   }
 
   @Bean
-  public CommandLineRunner commandLineRunner(EventRepositoryCustomImpl eventRepository) {
+  public CommandLineRunner commandLineRunner(EventRepository eventRepository) {
     return args -> {
       DatabaseClient databaseClient = DatabaseClient.create(connectionFactory());
       asList( "DROP TABLE IF EXISTS event CASCADE;",

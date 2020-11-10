@@ -13,6 +13,8 @@ import java.time.ZonedDateTime;
 @Component
 public class MonthlyRecurrenceCreator extends DailyRecurrenceCreator {
 
+    private static final int ONE_MONTH = 1;
+
     public MonthlyRecurrenceCreator(EventRepositoryCustom eventRepository,
                                     ModelMapper modelMapper) {
         super(eventRepository, modelMapper);
@@ -25,6 +27,6 @@ public class MonthlyRecurrenceCreator extends DailyRecurrenceCreator {
 
     @Override
     protected Integer getRecurrencePeriod(Period period) {
-        return period.getMonths() -1;
+        return period.getMonths() - ONE_MONTH;
     }
 }

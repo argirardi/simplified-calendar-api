@@ -1,5 +1,5 @@
 # Simplified Calendar API
-####Running the application
+#### Running the application
 
 1. Start PostgreSQL Database
   ```properties
@@ -9,7 +9,7 @@
   ```properties
   ./gradlew bootRun 
   ```
-####Open API Documentation
+#### Open API Documentation
 [Swagger](http://localhost:8080/simplified-calendar-api/swagger-ui.html)
 
 ##### Create a single Event

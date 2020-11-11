@@ -8,6 +8,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Service
@@ -33,14 +35,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Flux<Event> findEvents(String fromDate, String toDate) {
-        LocalDate fd = LocalDate.parse(fromDate);
-        LocalDate td = LocalDate.parse(toDate);
+    public Flux<Event> findEvents(LocalDate fromDate, LocalDate toDate) {
         return eventRepositoryCustom.findInfiniteRecurrentEvents()
                               .flatMap(infiniteRecurrentEvent -> {
                                     return eventRepositoryCustom.findLastEventFromInfiniteRecurrence(infiniteRecurrentEvent.getId(), fromDate, toDate)
-                                                                .flatMap(lastEventFromInfiniteRecurrence -> configureLastRecurrentEventForNewRecurrences(lastEventFromInfiniteRecurrence, fd, td))
-                                                                .switchIfEmpty(configureNewEventForRecurrence(infiniteRecurrentEvent, fd, td))
+                                                                .flatMap(lastEventFromInfiniteRecurrence -> configureLastRecurrentEventForNewRecurrences(lastEventFromInfiniteRecurrence, fromDate, toDate))
+                                                                .switchIfEmpty(configureNewEventForRecurrence(infiniteRecurrentEvent, fromDate, toDate))
                                                                 .flatMap(this::createRecurrences);
                                 }).thenMany(eventRepositoryCustom.findEvents(fromDate, toDate));
     }
@@ -57,8 +57,12 @@ public class EventServiceImpl implements EventService {
     }
 
     private Mono<Event> configureNewEventForRecurrence(Event event, LocalDate fromDate, LocalDate toDate) {
-           event.getRecurrence().setEndRecurrenceDate(toDate);
-           return Mono.just(event);
+        if (event.getStartDateTime().toLocalDate().isBefore(fromDate)) {
+            event.setStartDateTime(ZonedDateTime.of(fromDate, event.getStartDateTime().toLocalTime(), ZoneId.systemDefault()));
+        }
+
+       event.getRecurrence().setEndRecurrenceDate(toDate);
+       return Mono.just(event);
     }
 
     private Mono<Event> createRecurrences(Event event) {

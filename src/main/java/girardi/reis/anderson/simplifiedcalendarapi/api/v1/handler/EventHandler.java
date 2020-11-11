@@ -6,11 +6,14 @@ import girardi.reis.anderson.simplifiedcalendarapi.business.domain.Event;
 import girardi.reis.anderson.simplifiedcalendarapi.business.service.EventService;
 import girardi.reis.anderson.simplifiedcalendarapi.infrastructure.validator.Validatable;
 import org.modelmapper.ModelMapper;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 @Component
 public class EventHandler {
@@ -39,7 +42,11 @@ public class EventHandler {
 
     public Mono<ServerResponse> findEvents(ServerRequest request) {
 
-        return eventService.findEvents(request.queryParam("fromDate").get(), request.queryParam("toDate").get())
+        LocalDate defaultFromDate = LocalDate.now();
+        LocalDate defaultToDate = defaultFromDate.withDayOfMonth(defaultFromDate.lengthOfMonth());
+
+        return eventService.findEvents(request.queryParam("fromDate").map(LocalDate::parse).orElse(defaultFromDate),
+                                       request.queryParam("toDate").map(LocalDate::parse).orElse(defaultToDate))
                 .flatMap(event -> Mono.just(modelMapper.map(event, EventResponseDTO.class)))
                 .collectList()
                 .flatMap(event -> ServerResponse.ok().bodyValue(event));

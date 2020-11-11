@@ -10,7 +10,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Objects;
@@ -19,7 +18,8 @@ import java.util.Optional;
 @Component
 public class EventValidator implements Validatable<EventRequestDTO>{
 
-    private static final String INVALID_DURATION_MESSAGE_TEMPLATE = "The event duration must be lesser than %s minutes.";
+    private static final String DURATION_MUST_BE_GREATER_THAN_ZERO = "The event duration must be greater than 0 minute.";
+    private static final String INVALID_MAXIMUM_DURATION_MESSAGE_TEMPLATE = "The event duration must be lesser than %s minutes.";
 
     public static final String NAME_FIELD = "name";
     public static final String START_DATE_TIME_FIELD = "startDateTime";
@@ -32,7 +32,7 @@ public class EventValidator implements Validatable<EventRequestDTO>{
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, NAME_FIELD, "field.required");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, START_DATE_TIME_FIELD, "field.required");
-        ValidationUtils.rejectIfEmpty(errors, DURATION_FIELD, "field.required");
+        validateDuration(errors, event);
         validateSpanningEvent(errors, event);
 
         if (errors.hasErrors()) {
@@ -42,6 +42,13 @@ public class EventValidator implements Validatable<EventRequestDTO>{
         return validateRecurrence(event.getRecurrence())
                .switchIfEmpty(Mono.just(new RecurrenceDTO()))
                .map(recurrence -> event) ;
+    }
+
+    private void validateDuration(Errors errors, EventRequestDTO event) {
+
+        if (Objects.isNull(event.getDuration()) || event.getDuration() == 0) {
+            errors.rejectValue(DURATION_FIELD, "field.invalid", DURATION_MUST_BE_GREATER_THAN_ZERO);
+        }
     }
 
     private Mono<RecurrenceDTO> validateRecurrence(RecurrenceDTO recurrence) {
@@ -61,7 +68,7 @@ public class EventValidator implements Validatable<EventRequestDTO>{
         if (isStartDateTimeAndDurationValid(errors)) {
 
             if (isSpanningEvent(event)) {
-                errors.rejectValue(DURATION_FIELD, "field.required", String.format(INVALID_DURATION_MESSAGE_TEMPLATE, event.getDuration()));
+                errors.rejectValue(DURATION_FIELD, "field.required", String.format(INVALID_MAXIMUM_DURATION_MESSAGE_TEMPLATE, event.getDuration()));
             }
         }
 

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 @Repository
 public class EventRepositoryCustomImpl implements EventRepositoryCustom  {
 
@@ -33,13 +35,13 @@ public class EventRepositoryCustomImpl implements EventRepositoryCustom  {
     }
 
     @Override
-    public Flux<Event> findEvents(String fromDate, String toDate) {
+    public Flux<Event> findEvents(LocalDate fromDate, LocalDate toDate) {
         return eventRepository.findEvents(fromDate, toDate)
                 .map(eventEntity -> modelMapper.map(eventEntity, Event.class));
     }
 
     @Override
-    public Mono<Event> findLastEventFromInfiniteRecurrence(Long id, String fromDate, String toDate) {
+    public Mono<Event> findLastEventFromInfiniteRecurrence(Long id, LocalDate fromDate, LocalDate toDate) {
         return eventRepository.findLastEventFromInfiniteRecurrence(id, fromDate, toDate)
                 .map(eventEntity -> modelMapper.map(eventEntity, Event.class));
 

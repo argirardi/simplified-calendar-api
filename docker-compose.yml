@@ -1,14 +1,49 @@
-version: "3"
+---
+networks:
+  redelocal:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+      driver: bridge
 services:
-  simplified-calendar-postgres:
-    container_name: simplified-calendar-db
-    image: postgres
+  simplified-calendar-api:
+    build:
+      context: "."
+    #  dockerfile: Dockerfile
+    depends_on:
+      - simplified-calendar-postgresql
+    command: sh -c "/wait && /sayhello"
     environment:
-      POSTGRES_DB: simplified-calendar
-      POSTGRES_USER: simplified-calendar
-      POSTGRES_PASSWORD: utDem3uFz2P4L!QF
+      - WAIT_HOSTS=postgres:5432
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    image: api
+    networks:
+      - redelocal
+    ports:
+      - "8887:8887"
+    restart: always
+    working_dir: /app
+  simplified-calendar-postgresql:
+    container_name: simplified-calendar-db
+    environment:
       PGDATA: /data/postgres
+      POSTGRES_DB: simplified-calendar
+      POSTGRES_PASSWORD: utDem3uFz2P4L!QF
+      POSTGRES_USER: simplified-calendar
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U simplified-calendar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - redelocal
+
+    ports:
+      - 127.0.0.2:5432:5432
+    restart: always
     volumes:
       - "./data/postgres:/var/lib/postgresql/simplified-calendar/data"
-    ports:
-      - 5432:5432
+version: "3"

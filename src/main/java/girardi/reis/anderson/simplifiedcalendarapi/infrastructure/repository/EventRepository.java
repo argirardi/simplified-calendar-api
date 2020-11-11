@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 @Repository
 public interface EventRepository extends ReactiveCrudRepository<EventEntity, Long> {
 
@@ -21,10 +23,10 @@ public interface EventRepository extends ReactiveCrudRepository<EventEntity, Lon
     @Query("SELECT *" +
             "  FROM event" +
             "  WHERE 1 = 1" +
-            "    AND date_trunc('day', start_date_time) >= TO_TIMESTAMP(:fromDate,'YYYY-MM-DD')" +
-            "    AND date_trunc('day', start_date_time) <= TO_TIMESTAMP(:toDate,'YYYY-MM-DD')" +
+            "    AND date_trunc('day', start_date_time) >= :fromDate" +
+            "    AND date_trunc('day', start_date_time) <= :toDate" +
             "  ORDER BY start_date_time")
-    Flux<EventEntity> findEvents(String fromDate, String toDate);
+    Flux<EventEntity> findEvents(LocalDate fromDate, LocalDate toDate);
 
     @Query("SELECT *" +
            "  FROM event" +
@@ -32,10 +34,10 @@ public interface EventRepository extends ReactiveCrudRepository<EventEntity, Lon
            "   and id = (SELECT MAX(ID)" +
            "               FROM event" +
            "              WHERE parent_event_id = :id" +
-           "                AND date_trunc('day', start_date_time) >= TO_TIMESTAMP(:fromDate,'YYYY-MM-DD') " +
-           "                AND date_trunc('day', start_date_time) <= TO_TIMESTAMP(:toDate,'YYYY-MM-DD') " +
+           "                AND date_trunc('day', start_date_time) >= :fromDate " +
+           "                AND date_trunc('day', start_date_time) <= :toDate " +
            ")")
-    Mono<EventEntity> findLastEventFromInfiniteRecurrence(Long id, String fromDate, String toDate);
+    Mono<EventEntity> findLastEventFromInfiniteRecurrence(Long id, LocalDate fromDate, LocalDate toDate);
 
     @Query("DELETE" +
            "  FROM event" +
